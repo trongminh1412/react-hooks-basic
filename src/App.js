@@ -1,9 +1,10 @@
 
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import './App.scss';
 import ColorBox from './component/ColorBox';
 import TodoList from './component/TodoList';
 import TodoForm from './component/TodoForm';
+import PostList from './component/PostList';
 
 function App() {
   const [todoList, setTodoList] = useState([
@@ -11,6 +12,32 @@ function App() {
     {id:2, title: "two"},
     {id:3, title: "three"},
   ]);
+ 
+  const [postList, setPostList] = useState([]);
+  
+  useEffect(() => {
+    async function fetchPostList() {
+      //có khả năgn xảy ra lỗi, nên để trong try catch
+      try {
+        const requestUrl = 'http://js-post-api.herokuapp.com/api/posts?_limit=10&_page=1';
+        const response = await fetch(requestUrl);
+        const respinJSON = await response.json();
+        console.log({respinJSON});
+
+        const { data } = respinJSON;
+        setPostList(data);
+      } catch(error){
+        console.log('falled: ', error.message);
+      }
+      
+    }
+
+    fetchPostList();
+  },[]);//empty array
+  
+  useEffect(() => {
+    console.log('TODO ')
+  })
 
   function handleTodoClick(todo){
     console.log(todo);
@@ -36,9 +63,11 @@ function App() {
 
   return (
     <div className="app">
-      <h1>React hooks - Todolist</h1>
-      <TodoForm onSubmit={handleTodoFormSubmit} />
-      <TodoList todos={todoList} onTodoClick={handleTodoClick}/> 
+      <h1>React hooks - PostLis</h1>
+
+      <PostList posts={postList}/>
+      {/* <TodoForm onSubmit={handleTodoFormSubmit} />
+      <TodoList todos={todoList} onTodoClick={handleTodoClick}/>  */}
       <ColorBox/>
     </div>
   );
