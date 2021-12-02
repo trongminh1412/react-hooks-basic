@@ -5,6 +5,8 @@ import ColorBox from './component/ColorBox';
 import TodoList from './component/TodoList';
 import TodoForm from './component/TodoForm';
 import PostList from './component/PostList';
+import Pagination from './component/Pagination';
+import queryString from 'query-string';
 
 function App() {
   const [todoList, setTodoList] = useState([
@@ -14,18 +16,29 @@ function App() {
   ]);
  
   const [postList, setPostList] = useState([]);
+  const [pagination, setPagiation] = useState({
+    _page: 1,
+    _limit: 10,
+    _totalRows:11,
+  });
+  const [filters, setFilters] = useState({
+    _limit: 10,
+    _page: 1,
+  })
   
   useEffect(() => {
     async function fetchPostList() {
       //có khả năgn xảy ra lỗi, nên để trong try catch
       try {
-        const requestUrl = 'http://js-post-api.herokuapp.com/api/posts?_limit=10&_page=1';
+        const paramString = queryString.stringify(filters);
+        const requestUrl = `http://js-post-api.herokuapp.com/api/posts?${paramString}`;
         const response = await fetch(requestUrl);
         const respinJSON = await response.json();
         console.log({respinJSON});
 
-        const { data } = respinJSON;
+        const { data, pagination } = respinJSON;
         setPostList(data);
+        setPagiation(pagination);
       } catch(error){
         console.log('falled: ', error.message);
       }
@@ -33,11 +46,20 @@ function App() {
     }
 
     fetchPostList();
-  },[]);//empty array
+  },[filters]);//empty array
   
+  //render mỗi lần request
   useEffect(() => {
     console.log('TODO ')
   })
+
+  function handlePageChange( newPage){
+    console.log(' page: ', newPage);
+    setFilters({
+      ...filters,
+      _page:newPage,
+    })
+  }
 
   function handleTodoClick(todo){
     console.log(todo);
@@ -64,13 +86,15 @@ function App() {
   return (
     <div className="app">
       <h1>React hooks - PostLis</h1>
-
+      <Pagination pagination={pagination} onPageChange={handlePageChange}/>
       <PostList posts={postList}/>
       {/* <TodoForm onSubmit={handleTodoFormSubmit} />
       <TodoList todos={todoList} onTodoClick={handleTodoClick}/>  */}
-      <ColorBox/>
+      {/* <ColorBox/> */}
     </div>
   );
 }
 
 export default App;
+
+//npm --save query-string: convert object to string,...
