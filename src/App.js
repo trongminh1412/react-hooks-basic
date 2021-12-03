@@ -9,6 +9,7 @@ import Pagination from './component/Pagination';
 import queryString from 'query-string';
 import PostFilterForm from './component/PostFilterForm';
 import Clock from './component/Clock';
+import MagicBox from './component/MagicBox';
 
 function App() {
   const [todoList, setTodoList] = useState([
@@ -104,8 +105,10 @@ function App() {
     <div className="app">
       <h1>React hooks - Clock</h1>
        {showClock && <Clock/>}
-      <button onClick={() => setShowClock(false)}>hideClock</button>
-      <button onClick={() => setShowClock(true)}>showClock</button>
+
+       <MagicBox/>
+      {/* <button onClick={() => setShowClock(false)}>hideClock</button>
+      <button onClick={() => setShowClock(true)}>showClock</button> */}
       {/* <PostFilterForm onSubmit={handleFilterChange}/>
       <Pagination pagination={pagination} onPageChange={handlePageChange}/>
       <PostList posts={postList}/> */}
