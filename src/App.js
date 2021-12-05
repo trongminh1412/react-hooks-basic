@@ -10,6 +10,7 @@ import queryString from 'query-string';
 import PostFilterForm from './component/PostFilterForm';
 import Clock from './component/Clock';
 import MagicBox from './component/MagicBox';
+import Hero from './component/Hero';
 
 function App() {
   const [todoList, setTodoList] = useState([
@@ -54,9 +55,9 @@ function App() {
   },[filters]);//empty array
   
   //render mỗi lần request
-  useEffect(() => {
-    console.log('TODO ')
-  })
+  // useEffect(() => {
+  //   console.log('TODO ')
+  // })
 
   function handlePageChange( newPage){
     console.log(' page: ', newPage);
@@ -101,12 +102,18 @@ function App() {
   //unmount
   const [showClock, setShowClock] = useState(true);
 
+  //Memoization
+  const [count, setCount] = useState(0);
+
+  const handleHeroClick = () =>{
+
+  }
   return (
     <div className="app">
       <h1>React hooks - Clock</h1>
-       {showClock && <Clock/>}
+      {/* {showClock && <Clock/>} */}
 
-       <MagicBox/>
+      {/* <MagicBox/> */}
       {/* <button onClick={() => setShowClock(false)}>hideClock</button>
       <button onClick={() => setShowClock(true)}>showClock</button> */}
       {/* <PostFilterForm onSubmit={handleFilterChange}/>
@@ -115,6 +122,10 @@ function App() {
       {/* <TodoForm onSubmit={handleTodoFormSubmit} />
       <TodoList todos={todoList} onTodoClick={handleTodoClick}/>  */}
       {/* <ColorBox/> */}
+
+      <p>{count}</p>
+      <button onClick={() => setCount(count + 1)}>start</button>
+      <Hero name="memo" onClick={handleHeroClick}/>
     </div>
   );
 }
